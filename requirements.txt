@@ -26,8 +26,7 @@ psycopg2==2.8.3
 pur==5.2.2
 pycparser==2.19
 pytictoc==1.5.0
-# Editable Git install with no remote (pytube==9.5.1)
--e d:\projects\python projects\bashtube_v2\venv\src\pytube
+-e git://github.com/apanaee/pytube.git@6adb52c97425d17bc84c5ddae55651e3807a73e9#egg=pytube
 pytz==2019.2
 requests==2.22.0
 six==1.12.0
