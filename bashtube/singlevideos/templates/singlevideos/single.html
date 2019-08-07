@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="highlight-clean">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center text-primary"><strong>Download Videos from Youtube, the smart way with no ads
+                    &nbsp;</strong>
+                    <br>
+                </h2>
+                <hr>
+                <p class="text-center">Please copy and paste your youtube link here to download and preview your video
+                    from
+                    Youtube.</p>
+                <p class="text-center">We will be providing more features to this application, so stay tuned !</p>
+            </div>
+            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                <form>
+                    <div class="form-row">
+                        <div class="col-12 col-md-9 mb-2 mb-md-0">
+                            <input class="form-control form-control-lg" type="url"
+                                   placeholder="https://www.youtube.com/watch?v=code" id="input">
+                            <div id="alert"></div>
+
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <button class="btn btn-primary btn-block btn-lg" type="submit" id="load">Load</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Content place-over-->
+                <div class="mt-5 d-none" id="content">
+                    <p class="text-muted">Youtube Content Found</p>
+                    <hr>
+                    <div>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a role="tab" data-toggle="tab" class="nav-link active" href="#tab-1">Content</a>
+                            </li>
+                            <li class="nav-item"><a role="tab" data-toggle="tab" class="nav-link" href="#tab-2">Description</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content mt-3">
+                            <div role="tabpanel" class="tab-pane active" id="tab-1">
+                                <section>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-6 mx-auto d-block">
+                                                <div class="card mb-4 box-shadow ">
+                                                    <img class="card-img-top w-100 d-block" src="" id="thumbnail"/>
+                                                    <div class="card-body">
+                                                        <h6 class="text-muted card-subtitle mb-2" id="title"></h6>
+                                                        <hr>
+                                                        <span class="card-text" id="length"></span><br>
+                                                        <span class="card-text" id="views"></span><br>
+                                                        <span class="card-text">Rating : </span>
+                                                        <span class="card-text" id="rating"></span>
+                                                        <div class="dropdown mt-3">
+                                                            <button class="btn btn-primary dropdown-toggle"
+                                                                    type="button" id="Button"
+                                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                                    aria-expanded="false">
+                                                                Download Resolutions
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="Button" id="alter">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="tab-2">
+                                <p class="font-weight-bold">Content Description</p>
+                                <hr>
+                                <p id="description"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock body %}
+
+{% block script %}
+    {{ super() }}
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $("#load").one('click',((event) => {
+                event.preventDefault();
+                const input = $("#input").val();
+                if (input) {
+                    let box = bootbox.dialog({
+                        message: `<div class="text-center">
+                            <i class="fa fa-spin fa-spinner"></i> Loading Contents...
+                                </div>`,
+                        closeButton: false
+                    });
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ url_for("api.single_videos") }}',
+                        data: {'url': input},
+                        success: (results) => {
+                            if (results.error) {
+                                bootbox.alert(results.error, () => {
+                                    location.reload()
+                                });
+                            } else if (results.restricted) {
+                                bootbox.alert("We dont allow age restricted content, Sorry!!");
+                                location.reload();
+                            } else {
+                                window.onbeforeunload = (()=>{
+                                    return "If you refresh this page, Your results will be lost !!"
+                                })
+                                $("#content").removeClass("d-none");
+                                $("#thumbnail").attr("src",results.thumbnail_url);
+                                $("#title").html(results.title);
+                                $("#length").html(`Length : ${results.length} minutes`);
+                                $("#views").html(`Views : ${results.views}`);
+                                for (let i=0; i <= results.rating;i++){
+                                  $("#rating").append(`<span class="fa fa-star star"></span>`)
+                                }
+
+                                for (let i = 0; i < results.meta.length; i++) {
+							        $("#alter").append(`<a target='_blank' class='dropdown-item' href='{{ url_for("preview.viewer") }}?url=${results.meta[i].url}'>${results.meta[i].resolution} (${results.meta[i].size} MB)</a>`)
+						        }
+                                $("#description").html(results.descp)
+                            }
+                            box.modal("hide");
+                        },
+                        error: (xhr, status, error) => {
+                            bootbox.alert(xhr.response)
+                        }
+                    })
+                } else {
+                    bootbox.alert({
+                            message: "<b class='text-danger'>Please enter a url and hit load</b>",
+                            closeButton: false,
+                            backdrop: true,
+                            animate: true
+                        },
+                    )
+                }
+            }))
+        })
+    </script>
+{% endblock script %}

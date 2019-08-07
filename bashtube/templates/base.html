@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Bash Tube</title>
+    {#      <link href="{{ url_for('static',filename='img/logo.ico') }}" rel="icon">#}
+    {% block link_tag %}
+        <link href="{{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='PACE/themes/red/pace-theme-minimal.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='css/styles.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='fonts/font-awesome.min.css') }}" rel="stylesheet">
+
+    {% endblock %}
+    {% block script %}
+        <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='popper.js/dist/umd/popper.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='bootbox.js/dist/bootbox.all.min.js') }}"></script>
+        <script data-pace-options='{ "ajax": true }' src="{{ url_for('static',filename='PACE/pace.min.js') }}"></script>
+    {% endblock %}
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-light navbar-expand bg-light navigation-clean">
+    <div class="container"><a class="navbar-brand" href="#">BashTube</a>
+        <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"></button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item {% block active_single %} {% endblock %}">
+                    <a class="nav-link" href="{{ url_for('singlevideos.index') }}">Single Videos
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item {% block active_playlist %} {% endblock %}">
+                    <a class="nav-link " href="{{ url_for("playlist.index") }}">Playlist</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+{% block body %}
+
+{% endblock %}
+<footer class="footer bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto h-100 text-center text-lg-left">
+                <ul class="list-inline mb-2">
+                    <li class="list-inline-item"><a href="#">Terms of &nbsp;Use</a></li>
+                </ul>
+                <p class="text-muted small mb-4 mb-lg-0">© Bashtube 2019. All Rights Reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

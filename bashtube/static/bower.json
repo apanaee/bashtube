@@ -1,0 +1,21 @@
+{
+  "name": "bashtube",
+  "authors": [
+    "apana1 <0554apana@gmail.com>"
+  ],
+  "description": "youtube downloader",
+  "main": "../../wsgi.py",
+  "keywords": [
+    "download",
+    "videos",
+    "audio"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "dependencies": {
+    "bootbox.js": "bootbox#^5.2.0",
+    "toastr": "^2.1.3",
+    "PACE": "pace#^1.0.2"
+  }
+}

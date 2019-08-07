@@ -1,0 +1,107 @@
+.beautiful.bs-callout {
+    padding: 15px 30px 15px 15px;
+    margin: 20px 0;
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-radius: 0
+}
+
+.beautiful.bs-callout p:last-child {
+    font-size: 13px;
+    margin: 0
+}
+
+.beautiful.bs-callout + .beautiful.bs-callout {
+    margin-top: -5px
+}
+
+.beautiful.bs-callout-info {
+    background-color: #f5f8fd;
+    border-left-color: #8bb4e7;
+    color: #010407
+}
+
+.beautiful.bs-callout-info h4 {
+    color: #1b809e
+}
+
+.beautiful h4 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 0
+}
+
+.beautiful.alert {
+    border-width: 1px;
+    background-image: none;
+    border-color: transparent;
+    border-radius: 0;
+    box-shadow: none
+}
+
+.alert.alert-warning.beautiful {
+    background-color: #f9e491;
+    border-color: #f9e491;
+    color: #c29d0b
+}
+
+.bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    border-top-color: #EEE;
+    border-bottom-color: #EEE;
+    border-right-color: #EEE;
+    border-width: 1px 1px 1px 5px
+}
+
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px
+}
+
+.bs-callout p:last-child {
+    margin-bottom: 0
+}
+
+.bs-callout-success {
+    border-left-color: #3c763d
+}
+
+.bs-callout-success h4 {
+    color: #3c763d
+}
+
+.card.mb-4.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05)
+}
+
+.highlight-clean {
+    color: #313437;
+    background-color: #fff;
+    padding: 50px 0
+}
+
+.highlight-clean p {
+    color: #7d8285
+}
+
+.highlight-clean h2 {
+    font-weight: 700;
+    margin-bottom: 25px;
+    line-height: 1.5;
+    padding-top: 0;
+    margin-top: 0;
+    color: inherit
+}
+
+.highlight-clean .intro {
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto 25px
+}
+
+.star {
+    color: orange
+}

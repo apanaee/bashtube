@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container" style="padding-top: 23px;">
+    <div class="beautiful bs-callout bs-callout-info">
+        <h4>How to download this video</h4>
+        <p>
+           1. You can download this video by clicking on the download button on the player (For mobile phone users <i class="text-danger">Recommended</i>)
+        </p>
+          <p>
+           2. You can also copy this link below and paste into <a title="download idm" href="https://getintopc.com/softwares/download-managers/idm-internet-download-manager-6-33-free-download/">IDM ( Free downloader)</a> to download at higher speed
+              <a href="javascript:void(0)" id="help">[learn how to download with internet download manager]</a>
+        </p>
+        <textarea class="form-control" readonly rows="6">{{ url}}&title={{ title |replace(" ","_")}}</textarea>
+    </div>
+    <div class="row">
+            <div class="col-md-12 img-thumbnail">
+                <video width="100%" src="{{ url }}" class="border-primary" controls="" >
+                    <source src="" type="{{ mime }}">
+                </video>
+            </div>
+        </div>
+</div>
+{% endblock body %}
+{% block script %}
+    {{ super() }}
+    <script>
+    $(document).ready(()=>{
+        $("textarea").click(()=>{
+            $("textarea").select();
+            document.execCommand("copy")
+        })
+        $("#help").click(()=>{
+            bootbox.alert({
+                title:"How to use Internet download manager",
+                message: `Here is a video on how to download<hr>
+                <div class="col-md-12 img-thumbnail">
+                        <video width="100%" src="https://www.youtube.com/watch?v=5VX7sojco3s" class="border-primary" controls="" >
+                        </video>
+                    </div>`,
+                size: "large"
+            })
+        })
+    })
+    </script>
+{% endblock %}

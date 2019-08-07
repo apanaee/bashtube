@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+    <div class="beautiful bs-callout bs-callout-info">
+        <h4>You can download playlist from here </h4>
+        <p>
+            Insert the playlist link from youtube into the search form and click on load
+        </p>
+    </div>
+    <div class="row mb-5">
+        <div class="col">
+            <form class="search-form">
+                <div class="input-group">
+                    <input class="form-control" id="input" type="text" placeholder="https://www.youtube.com/watch?v=ABC list=ABC">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" type="button" id="load">Load</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row d-none" id="content_hold">
+        <div class="col">
+            <div class="bs-callout bs-callout-success">
+                <h4>Search Results</h4>
+                <hr>
+                <p>Number of videos in playlist -> <span id="num_play" class="text-danger"></span></p>
+                <p>Default Resolution (720p)</p>
+                <p>You can copy these links and paste into batch download Internet Download Manager</p>
+                <textarea name="" id="urls" cols="30" rows="5"  readonly class="form-control"></textarea>
+            </div>
+            <section >
+                <div class="container">
+                    <div class="row" id="playlist_content">
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+    {{ super() }}
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $("#load").one('click',((event) => {
+                event.preventDefault();
+                const input = $("#input").val();
+                if (input) {
+                    let box = bootbox.dialog({
+                        message: `<div class="text-center">
+                            <i class="fa fa-spin fa-spinner"></i> Loading Playlist Contents...
+                                </div>`,
+                        closeButton: false
+                    });
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ url_for("api.playlist") }}',
+                        data: {'url': input},
+                        success: (results) => {
+                            if (results.error) {
+                                bootbox.alert(results.error, () => {
+                                    location.reload()
+                                });
+                            } else {
+                                window.onbeforeunload = (()=>{
+                                    return "If you refresh this page, Your results will be lost !!"
+                                });
+                                $("#num_play").html(results.meta.length);
+                                for(let i=0;i < results.meta.length;i++){
+                                    $("#playlist_content").append(`
+                                <div class="col-lg-3" >
+                                <div class="card mb-4 box-shadow rounded-0">
+                                    <img class="card-img-top w-100 d-block rounded-0"
+                                        src="${results.meta[i].thumbnail_url}" id="thumbnail">
+                                    <div class="card-body">
+                                        <h6 class="text-muted card-subtitle mb-2">${results.meta[i].title}</h6>
+                                        <a target='_blank' class="btn btn-primary card-text" href='{{ url_for("preview.viewer") }}?url=${results.meta[i].url}'>${results.meta[i].resolution} (${results.meta[i].size} MB)</a>
+                                        <a href="javascript:void(0)" class="btn btn-secondary card-text" id="descp${i}">description </a></div>
+                                </div>
+                            </div>`);
+                                    $("#urls").val(results.meta[i].url_un);
+                                    $(`#descp${i}`).click(()=>{
+                                        bootbox.alert({
+                                            title:"Video Description",
+                                            message: `${results.meta[i].descp}`
+                                        })
+                                    })
+                                }
+                            }
+                            $("#content_hold").removeClass("d-none");
+                            box.modal("hide");
+                        },
+                        error: (xhr, status, error) => {
+                            bootbox.alert(xhr.response)
+                        }
+                    })
+                } else {
+                    bootbox.alert({
+                            message: "<b class='text-danger'>Please enter a url and hit load</b>",
+                            closeButton: false,
+                            backdrop: true,
+                            animate: true
+                        },
+                    )
+                }
+            }))
+        })
+    </script>
+    <script>
+    $(document).ready(()=>{
+        $("#urls").click(()=>{
+            $("textarea").select();
+            document.execCommand("copy")
+        })
+    })
+    </script>
+{% endblock %}
